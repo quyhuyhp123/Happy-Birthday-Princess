@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loading...</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 42%, rgba(255, 255, 255, 0.46), transparent 32%),
+        linear-gradient(135deg, #cde8ff 0%, #96c9fb 48%, #d5efff 100%);
+      font-family: "Trebuchet MS", Arial, sans-serif;
+    }
+
+    .loading-scene {
+      width: min(610px, 82vw);
+      text-align: center;
+    }
+
+    .progress-track {
+      position: relative;
+      height: 76px;
+      overflow: visible;
+      border: 8px solid rgba(255, 255, 255, 0.96);
+      border-radius: 16px;
+      background: rgba(98, 174, 239, 0.52);
+      box-shadow: 0 8px 18px rgba(71, 130, 182, 0.18), inset 0 2px 5px rgba(47, 118, 181, 0.22);
+    }
+
+    .progress-fill {
+      width: 0%;
+      height: 100%;
+      border-radius: 8px;
+      background: linear-gradient(90deg, #76b8ef, #afd9ff);
+      box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.38);
+      transition: width 0.12s linear;
+    }
+
+    .cloud {
+      position: absolute;
+      z-index: 1;
+      top: 50%;
+      left: 0%;
+      width: 156px;
+      height: 76px;
+      transform: translate(-50%, -53%);
+      transition: left 0.12s linear;
+      filter: drop-shadow(0 8px 5px rgba(93, 113, 157, 0.23));
+      animation: cloudBob 1.8s ease-in-out infinite;
+    }
+
+    .cloud-base,
+    .cloud::before,
+    .cloud::after,
+    .cloud-puff {
+      position: absolute;
+      display: block;
+      background: linear-gradient(145deg, #fffafd 5%, #f4d9ee 63%, #e8b8d8 100%);
+      box-shadow: inset 4px 5px 8px rgba(255, 255, 255, 0.88), inset -4px -5px 8px rgba(193, 127, 172, 0.17);
+    }
+
+    .cloud-base {
+      right: 13px;
+      bottom: 3px;
+      width: 126px;
+      height: 45px;
+      border-radius: 27px;
+    }
+
+    .cloud::before,
+    .cloud::after,
+    .cloud-puff { content: ""; border-radius: 50%; }
+
+    .cloud::before {
+      left: 27px;
+      bottom: 22px;
+      width: 61px;
+      height: 61px;
+    }
+
+    .cloud::after {
+      right: 25px;
+      bottom: 20px;
+      width: 69px;
+      height: 69px;
+    }
+
+    .cloud-puff {
+      left: 66px;
+      bottom: 39px;
+      width: 58px;
+      height: 58px;
+    }
+
+    .star {
+      position: absolute;
+      z-index: 1;
+      color: #93c9ee;
+      font-size: 25px;
+      line-height: 1;
+      text-shadow: 0 1px 1px #fff, 0 2px 4px rgba(94, 137, 174, 0.4);
+      animation: twinkle 1.4s ease-in-out infinite alternate;
+    }
+
+    .star-one { left: 43px; bottom: 20px; }
+    .star-two { left: 86px; bottom: 48px; font-size: 20px; animation-delay: 0.3s; }
+    .star-three { right: 25px; bottom: 19px; font-size: 23px; animation-delay: 0.6s; }
+
+    .trail-star {
+      position: absolute;
+      z-index: 0;
+      color: #fff9b2;
+      font-size: var(--trail-size);
+      line-height: 1;
+      pointer-events: none;
+      text-shadow: 0 0 7px rgba(255, 255, 255, 0.9), 0 2px 5px rgba(76, 136, 190, 0.35);
+      animation: trailStar 1.25s ease-out forwards;
+    }
+
+    .loading-label {
+      margin: 62px 0 0;
+      color: #fff;
+      font-size: clamp(24px, 4vw, 32px);
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-shadow: 0 3px 0 #5b81aa, 0 5px 8px rgba(62, 112, 159, 0.35);
+    }
+
+    .loading-label span { display: inline-block; min-width: 52px; }
+
+    @keyframes cloudBob {
+      0%, 100% { margin-top: -4px; }
+      50% { margin-top: 5px; }
+    }
+
+    @keyframes twinkle {
+      from { transform: scale(0.78) rotate(-10deg); opacity: 0.58; }
+      to { transform: scale(1.16) rotate(12deg); opacity: 1; }
+    }
+
+    @keyframes trailStar {
+      from {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(0.4) rotate(0deg);
+      }
+      to {
+        opacity: 0;
+        transform: translate(calc(-50% - var(--trail-distance)), var(--trail-rise)) scale(1.15) rotate(100deg);
+      }
+    }
+
+    @media (max-width: 520px) {
+      .progress-track { height: 60px; border-width: 6px; }
+      .cloud { transform: translate(-50%, -54%) scale(0.78); }
+      .loading-label { margin-top: 48px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="loading-scene" aria-label="Đang tải nội dung">
+    <div class="progress-track">
+      <div class="progress-fill"></div>
+      <div class="cloud" aria-hidden="true">
+        <span class="cloud-base"></span>
+        <span class="cloud-puff"></span>
+        <span class="star star-one">★</span>
+        <span class="star star-two">★</span>
+        <span class="star star-three">★</span>
+      </div>
+    </div>
+    <p class="loading-label">Loading <span id="progressText">0%</span></p>
+  </main>
+
+  <script>
+    const track = document.querySelector('.progress-track');
+    const fill = document.querySelector('.progress-fill');
+    const cloud = document.querySelector('.cloud');
+    const progressText = document.getElementById('progressText');
+    const duration = 5000;
+    const startTime = performance.now();
+    let lastTrailStar = 0;
+
+    function createTrailStar(progress, now) {
+      if (now - lastTrailStar < 135 || progress >= 100) return;
+      lastTrailStar = now;
+
+      const star = document.createElement('span');
+      star.className = 'trail-star';
+      star.textContent = Math.random() > 0.3 ? '✦' : '★';
+      star.style.left = `${progress}%`;
+      star.style.top = `${35 + Math.random() * 30}%`;
+      star.style.setProperty('--trail-size', `${12 + Math.random() * 15}px`);
+      star.style.setProperty('--trail-distance', `${35 + Math.random() * 45}px`);
+      star.style.setProperty('--trail-rise', `${-18 + Math.random() * 36}px`);
+      track.append(star);
+      star.addEventListener('animationend', () => star.remove());
+    }
+
+    function updateLoading(now) {
+      const progress = Math.min(((now - startTime) / duration) * 100, 100);
+      fill.style.width = `${progress}%`;
+      cloud.style.left = `${progress}%`;
+      progressText.textContent = `${Math.round(progress)}%`;
+      createTrailStar(progress, now);
+
+      if (progress < 100) {
+        requestAnimationFrame(updateLoading);
+      } else {
+        progressText.textContent = 'Done!';
+        setTimeout(() => {
+          window.location.href = './happybirthday/index.html';
+        }, 1000);
+      }
+    }
+
+    requestAnimationFrame(updateLoading);
+  </script>
+</body>
+</html>

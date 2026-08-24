@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Heart Animation</title>
+        <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+        <canvas id="heart"></canvas>
+        <div id="starField" aria-hidden="true"></div>
+        <button id="giftBox" class="gift-box" type="button" aria-label="Mở món quà"><span class="gift-ribbon"></span></button>
+        <div id="giftWarning" class="gift-warning" aria-hidden="true">
+                <div class="warning-panel" role="dialog" aria-modal="true" aria-labelledby="warningTitle">
+                        <h1 id="warningTitle">Lưu ý</h1>
+                        <p>Món quà này một khi đã nhận thì không thể trả lại, hãy cân nhắc trước khi bấm rồi.</p>
+                        <button id="acceptGift" type="button">Nhận quà</button>
+                        <button id="cancelGift" class="cancel-gift" type="button">Để sau</button>
+                </div>
+        </div>
+        <div id="videoModal" aria-hidden="true">
+                <div class="video-panel" role="dialog" aria-modal="true" aria-label="Video lời chúc">
+                        <button id="closeVideo" type="button" aria-label="Đóng video">×</button>
+                        <video id="birthdayVideo" controls preload="metadata">
+                                <source src="video.mp4" type="video/mp4">
+                        </video>
+                </div>
+        </div>
+        <audio id="heartMusic" src="nhac.mp3" autoplay loop preload="auto"></audio>
+        <script src="script.js"></script>
+        <script>
+                const heartMusic = document.getElementById('heartMusic');
+                heartMusic.play().catch(() => {});
+
+                const giftBox = document.getElementById('giftBox');
+                const videoModal = document.getElementById('videoModal');
+                const birthdayVideo = document.getElementById('birthdayVideo');
+                const closeVideo = document.getElementById('closeVideo');
+
+                const giftWarning = document.getElementById('giftWarning');
+                const acceptGift = document.getElementById('acceptGift');
+                const cancelGift = document.getElementById('cancelGift');
+                const giftClaimedKey = 'birthdayGiftClaimedV2';
+                let giftClaimed = localStorage.getItem(giftClaimedKey) === 'true';
+
+                function showGiftWarning() {
+                        giftWarning.classList.add('show');
+                        giftWarning.setAttribute('aria-hidden', 'false');
+                        acceptGift.focus();
+                }
+
+                function hideGiftWarning() {
+                        giftWarning.classList.remove('show');
+                        giftWarning.setAttribute('aria-hidden', 'true');
+                        giftBox.focus();
+                }
+
+                function openVideo() {
+                        videoModal.classList.add('show');
+                        videoModal.setAttribute('aria-hidden', 'false');
+                        heartMusic.pause();
+                        birthdayVideo.play().catch(() => {});
+                }
+
+                function hideVideo() {
+                        videoModal.classList.remove('show');
+                        videoModal.setAttribute('aria-hidden', 'true');
+                        birthdayVideo.pause();
+                        heartMusic.play().catch(() => {});
+                }
+
+                giftBox.addEventListener('click', () => {
+                        if (giftClaimed) openVideo();
+                        else showGiftWarning();
+                });
+                acceptGift.addEventListener('click', () => {
+                        giftClaimed = true;
+                        localStorage.setItem(giftClaimedKey, 'true');
+                        giftWarning.classList.remove('show');
+                        giftWarning.setAttribute('aria-hidden', 'true');
+                        openVideo();
+                });
+                cancelGift.addEventListener('click', hideGiftWarning);
+                giftWarning.addEventListener('click', (event) => {
+                        if (event.target === giftWarning) hideGiftWarning();
+                });
+                closeVideo.addEventListener('click', hideVideo);
+                videoModal.addEventListener('click', (event) => {
+                        if (event.target === videoModal) hideVideo();
+                });
+
+                let lastHeartTime = 0;
+                document.addEventListener('mousemove', (event) => {
+                        const now = performance.now();
+                        if (now - lastHeartTime < 70) return;
+                        lastHeartTime = now;
+
+                        const heart = document.createElement('span');
+                        heart.className = 'cursor-heart';
+                        heart.textContent = '♥';
+                        heart.style.left = `${event.clientX}px`;
+                        heart.style.top = `${event.clientY}px`;
+                        heart.style.setProperty('--heart-size', `${14 + Math.random() * 14}px`);
+                        heart.style.setProperty('--drift', `${-35 + Math.random() * 70}px`);
+                        heart.style.setProperty('--heart-color', ['#ff4f81', '#ff91b5', '#ffda70', '#d9a7ff'][Math.floor(Math.random() * 4)]);
+                        document.body.append(heart);
+                        heart.addEventListener('animationend', () => heart.remove());
+                });
+        </script>
+</body>
+</html>
