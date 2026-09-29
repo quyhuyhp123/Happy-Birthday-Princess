@@ -161,6 +161,12 @@
       .cloud { transform: translate(-50%, -54%) scale(0.78); }
       .loading-label { margin-top: 48px; }
     }
+    body { min-height: 100svh; }
+    @media (max-width: 600px) {
+      .loading-scene { width: calc(100vw - 112px); }
+      .progress-track { height: 58px; border-width: 6px; }
+      .cloud { scale: .65; transform-origin: left center; }
+    }
   </style>
 </head>
 <body>

@@ -6,7 +6,7 @@ var w = c.width = window.innerWidth,
     hh = h / 2,
     
     opts = {
-      strings: [ 'HAPPY', 'BIRTHDAY!','Daniel' ],
+      strings: [ 'HAPPY', 'BIRTHDAY!','My Cinn' ],
       charSize: 60,
       charSpacing: 68,
       lineHeight: 75,
@@ -652,7 +652,10 @@ function anim(){
     }
   }
   
+  ctx.save();
   ctx.translate( hw, hh );
+  var textScale = Math.min(1, (w - 32) / (calc.totalWidth + opts.charSize), h / 420);
+  ctx.scale(textScale, textScale);
   
   var done = true;
   for( var l = 0; l < letters.length; ++l ){
@@ -662,7 +665,7 @@ function anim(){
       done = false;
   }
   
-  ctx.translate( -hw, -hh );
+  ctx.restore();
   
   if( done ) {
     for( var l = 0; l < letters.length; ++l )

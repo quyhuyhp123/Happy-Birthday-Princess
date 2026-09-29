@@ -58,10 +58,11 @@ var init = function () {
 
     var targetPoints = [];
     var pulse = function (kx, ky) {
+        var fit = Math.min(1, width / 480, height / 560);
         for (i = 0; i < pointsOrigin.length; i++) {
             targetPoints[i] = [];
-            targetPoints[i][0] = kx * pointsOrigin[i][0] + width / 2;
-            targetPoints[i][1] = ky * pointsOrigin[i][1] + height / 2;
+            targetPoints[i][0] = kx * pointsOrigin[i][0] * fit + width / 2;
+            targetPoints[i][1] = ky * pointsOrigin[i][1] * fit + height / 2;
         }
     };
 

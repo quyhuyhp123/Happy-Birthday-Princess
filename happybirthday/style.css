@@ -90,3 +90,9 @@ body::before {
     opacity: 1;
     visibility: visible;
 }
+/* Keep controls inside the visible viewport on touch screens. */
+html, body { margin: 0; min-height: 100svh; }
+#nextButton { min-height: 44px; max-width: calc(100vw - 32px); touch-action: manipulation; }
+@media (max-width: 600px), (max-height: 500px) {
+  #nextButton { top: auto; bottom: max(24px, env(safe-area-inset-bottom)); transform: translateX(-50%); }
+}
