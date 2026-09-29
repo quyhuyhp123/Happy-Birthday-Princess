@@ -15,7 +15,7 @@
         <div id="giftWarning" class="gift-warning" aria-hidden="true">
                 <div class="warning-panel" role="dialog" aria-modal="true" aria-labelledby="warningTitle">
                         <h1 id="warningTitle">Lưu ý</h1>
-                        <p>Món quà này một khi đã nhận thì không thể trả lại, hãy cân nhắc trước khi bấm rồi.</p>
+                        <p>Một khi đã mở quà thì không thể trả lại, hãy cân nhắc trước khi nhận nhé!</p>
                         <button id="acceptGift" type="button">Nhận quà</button>
                         <button id="cancelGift" class="cancel-gift" type="button">Để sau</button>
                 </div>
@@ -24,7 +24,7 @@
                 <div class="video-panel" role="dialog" aria-modal="true" aria-label="Video lời chúc">
                         <button id="closeVideo" type="button" aria-label="Đóng video">×</button>
                         <video id="birthdayVideo" controls playsinline preload="metadata">
-                                <source src="video.mp4" type="video/mp4">
+                                <source src="huy2.mp4" type="video/mp4">
                         </video>
                 </div>
         </div>
@@ -42,8 +42,6 @@
                 const giftWarning = document.getElementById('giftWarning');
                 const acceptGift = document.getElementById('acceptGift');
                 const cancelGift = document.getElementById('cancelGift');
-                const giftClaimedKey = 'birthdayGiftClaimedV2';
-                let giftClaimed = localStorage.getItem(giftClaimedKey) === 'true';
 
                 function showGiftWarning() {
                         giftWarning.classList.add('show');
@@ -71,13 +69,8 @@
                         heartMusic.play().catch(() => {});
                 }
 
-                giftBox.addEventListener('click', () => {
-                        if (giftClaimed) openVideo();
-                        else showGiftWarning();
-                });
+                giftBox.addEventListener('click', showGiftWarning);
                 acceptGift.addEventListener('click', () => {
-                        giftClaimed = true;
-                        localStorage.setItem(giftClaimedKey, 'true');
                         giftWarning.classList.remove('show');
                         giftWarning.setAttribute('aria-hidden', 'true');
                         openVideo();
